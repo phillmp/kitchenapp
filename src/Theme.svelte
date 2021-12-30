@@ -37,6 +37,11 @@
 		color: white;
 		border: 1px solid white;
 	}
+    :global(.mainbutton.invert) {
+		color: white;
+        background-color: black;
+		border: 1px solid white;
+	}
 	
 	:global(input[type=text]) {
 		border-radius: 0px;

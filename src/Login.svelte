@@ -38,7 +38,7 @@
                     title={pwd_validation_msg}>
             </li>
             <li>
-                <input type="button" value="Log in" on:click={do_login(username,pwd)}>
+                <input type="button" id="loginbutton" class="mainbutton invert" value="Log in" on:click={do_login(username,pwd)}>
             </li>
         </ul>
     </form>
@@ -53,5 +53,9 @@
     }
     form>ul>li {
         padding: 0.3em;
+    }
+    #loginbutton{
+        margin: 1em 0;
+        width:100%
     }
 </style>
