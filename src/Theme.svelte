@@ -1,8 +1,4 @@
 <style>
-    :global(body){
-        font-size: 16px;
-        font-family: Nunito, Arial, sans-serif;
-    }
     :global(.maincontainer ){
 		display: flex;
 		flex-direction: column;
