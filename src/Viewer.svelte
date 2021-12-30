@@ -93,13 +93,17 @@ import { reload } from "firebase/auth";
 
 {#if loadedOnceOrMore === itemid && !entryNotExist}
 <div class="maincontainer">
-	<input type="text" id="title" name="title"
+	<input type="text" id="name" class="dashed"
 	placeholder="{newentry ? "New item" : "No name"}" bind:value={itemparams.name}>
-	<input type="date" id="expiry_date" 
-    name="expiry_date" bind:value={itemparams.expiry_date}
-    class:expired={isexpired}
-    class:safe={issafe}
-    >
+	<div>
+        <label for="expiry_date">Expiry date</label>
+        <input type="date" id="expiry_date" name="expiry_date"
+        placeholder="yyyy-mm-dd"
+        bind:value={itemparams.expiry_date}
+        class:expired={isexpired}
+        class:safe={issafe}
+        >
+    </div>
 	<Icongrid tags={itemparams.tags}/>
 </div>
 

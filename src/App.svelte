@@ -4,11 +4,11 @@
 
 	import Login from "./Login.svelte"
 	import Viewer from "./Viewer.svelte"
-	import Theme from "./Theme.svelte"
+	import LoadingSpinner from "./LoadingSpinner.svelte"
+	
 	let params = new URLSearchParams(document.location.search);
-	let itemid = params.get("id"); // is the string "Jonathan"
+	let itemid = params.get("id");
 	let cur_uid = ''
-	let loggedin = false;
 	let fbloaded = false;
 
 	const firebaseConfig = {
@@ -35,8 +35,10 @@
             console.log(errorMessage);
         });
 	}
-
+	
 	onAuthStateChanged(auth, (user) => {
+		// This will fire on initial load then also
+		// whenever there is a change to the login state
 		fbloaded = true;
 		if (user) {
 			cur_uid = user.uid;
@@ -46,12 +48,7 @@
 	});
 
 </script>
-<!-- <ul>
-	<li>Yep it's printing stuff</li>
-	<li>Your user id is {cur_uid}</li>
-	<li>Current item id is {itemid}</li>
-</ul> -->
-<Theme/>
+
 <div id="toplevel">
 {#if !cur_uid && fbloaded}
 <Login/>
@@ -62,7 +59,7 @@
 </div>
 
 {:else}
-<!-- show loading spinner -->
+<LoadingSpinner/>
 {/if}
 </div>
 
