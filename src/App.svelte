@@ -1,118 +1,74 @@
 <script>
-	import Icongrid from './icongrid.svelte'
-	let toplevelicons = [
-		{
-			'label': 'meat',
-			'icon':'🍖',
-			'selected': false,
-		},
-		{
-			'label': 'egg',
-			'icon':'🍳',
-			'selected': false,
-		},
-		{
-			'label': 'milk',
-			'icon':'🥛',
-			'selected': false,
-		},
-		{
-			'label': 'wheat',
-			'icon':'🌾',
-			'selected': false,
-		},
-		{
-			'label': 'onion',
-			'icon':'🧅',
-			'selected': false,
-		},
-		{
-			'label': 'garlic',
-			'icon':'🧄',
-			'selected': false,
-		},
-		{
-			'label': 'spicy',
-			'icon':'🌶',
-			'selected': false,
-		},
-		{
-			'label': 'peanuts',
-			'icon':'🥜',
-			'selected': false,
-		},
-		{
-			'label': 'lock',
-			'icon':'🔒',
-			'selected': false,
-		},
-	]
+	import { initializeApp } from "firebase/app";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+
+	import Login from "./Login.svelte"
+	import Viewer from "./Viewer.svelte"
+	import Theme from "./Theme.svelte"
+	let params = new URLSearchParams(document.location.search);
+	let itemid = params.get("id"); // is the string "Jonathan"
+	let cur_uid = ''
+	let loggedin = false;
+	let fbloaded = false;
+
+	const firebaseConfig = {
+        apiKey: "AIzaSyBUkJT0AEzVrGAms1WbDAbn_dTNehXbPNw",
+        authDomain: "kitchenapp-334918.firebaseapp.com",
+        projectId: "kitchenapp-334918",
+        storageBucket: "kitchenapp-334918.appspot.com",
+        messagingSenderId: "20897173184",
+        appId: "1:20897173184:web:ca123ab0bfd13ffc9ca725",
+        measurementId: "G-QHMM1CJLLL"
+        };
+	
+	const fbapp = initializeApp(firebaseConfig);
+	const auth = getAuth();
+
+	async function logout(){
+		const auth = getAuth();
+        signOut(auth).then(() => {
+            console.log("signed out");
+        }).catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode);
+            console.log(errorMessage);
+        });
+	}
+
+	onAuthStateChanged(auth, (user) => {
+		fbloaded = true;
+		if (user) {
+			cur_uid = user.uid;
+		} else {
+			cur_uid = '';
+		}
+	});
+
 </script>
-<div id="maincontainer">
-	<input type="text" id="title" name="title"
-	placeholder="No name">
-	<input type="date" id="expiry_date" name="expiry_date">
-	<Icongrid icons={toplevelicons}/>
+<!-- <ul>
+	<li>Yep it's printing stuff</li>
+	<li>Your user id is {cur_uid}</li>
+	<li>Current item id is {itemid}</li>
+</ul> -->
+<Theme/>
+<div id="toplevel">
+{#if !cur_uid && fbloaded}
+<Login/>
+{:else if fbloaded}
+<Viewer app={fbapp} auth={auth} itemid={itemid}/>
+<div class="buttonbox white">
+	<button class="mainbutton" on:click={logout}>Log out</button>
 </div>
 
-<div class="buttonbox">
-	<button class="mainbutton white">hello nerd</button>
-	<button class="mainbutton white">Daddy love you very much baby girl</button>
+{:else}
+<!-- show loading spinner -->
+{/if}
 </div>
 
 <style>
-	#maincontainer {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		margin: 0.5em 0 3em 0;
-	}
-	#maincontainer > div {
-		font-size: 15pt;
-		margin: 10px 0;
-	}
-	.buttonbox .mainbutton {
-		margin-left: auto
-	}
-
-	div.buttonbox {
-		display: flex;
-		flex-direction: column;
-		justify-content: right;
-		background-color: black;
-		color: white;
-		padding: 20px;
-	}
-	input,.mainbutton {
-		color: black;
+	#toplevel {
 		border: 1px solid black;
-		border-radius: 6px;
-		font-size: 1em;
-		padding: 10px;
-		background-color: var(--transparent);
+		padding: 2em 0 0 0;
 	}
-	
-	.mainbutton.white {
-		color: white;
-		border: 1px solid white;
-	}
-	
-	input[type=text]{
-		border-radius: 0px;
-		border-width: 0;
-		border-bottom-width: 1px;
-		border-bottom-style: dashed;
-	}
-
-	#title {
-		max-width:10em;
-		font-size:1.4em;
-		margin: 20px 0;
-		text-align: center;
-	}
-
 </style>
-<!-- <main>
-
-</main> -->

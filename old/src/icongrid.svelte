@@ -1,5 +1,6 @@
 <script>
     export let icons;
+    export let readonly;
     function onIconPress(){
         let lab = this.id.split("iconbutton_")[1];
         console.log("Pressed " + lab)
@@ -12,7 +13,7 @@
 
 <div class=icongrid>
     {#each icons as icon}
-        <button class="iconbutton{icon.selected ? ' selected' : ''}" 
+        <button class="iconbutton{icon.selected ? ' selected' : ''}{readonly ? ' read' : ''}" 
             id="iconbutton_{icon.label}" on:click={onIconPress}>
         <div>
             {icon.icon}
@@ -47,7 +48,7 @@
         margin: 5px
     }
 
-    .iconbutton.selected {
+    .iconbutton.selected:not(.read) {
         background-color: #d7e7f3;
         border-color: #3a88c4;
     }
