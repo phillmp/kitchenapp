@@ -69,7 +69,6 @@
     
     get(child(ref(db), 'Items/' + itemid)).then( (snapshot)  => {
         loadedOnceOrMore = itemid;        
-        console.log("yep i ran")
         if (snapshot.exists() && snapshot.val().home_id) {
             console.log(snapshot.val().name)
             itemparams.home_id = snapshot.val().home_id
@@ -78,7 +77,6 @@
             
             if (snapshot.val().expiry_date){
                 itemparams.expiry_date = snapshot.val().expiry_date;
-                console.log(isexpired)
                 itemparams.name = snapshot.val().name
             }
             else {
