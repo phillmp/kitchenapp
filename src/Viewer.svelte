@@ -1,15 +1,37 @@
 <script>
-import { reload } from "firebase/auth";
-
+    import { createEventDispatcher } from 'svelte';
     import { getDatabase, ref, child, get, set, onValue} from "firebase/database";
     import Icongrid from "./Icongrid.svelte"
+    import { eventStates } from "./Messagebar.svelte"
     
     export let app;
     export let auth;
     export let itemid;
+
     let loadedOnceOrMore=false;
     let newentry=false;
     let entryNotExist=false;
+
+	const dispatch = createEventDispatcher();
+
+    //TODO could probably prototype viewerEvent
+    const dispatchEvents = {
+        'save': {
+            'failed':{
+                'viewerEvent':{
+                    'message': "Save failed!",
+                    'state': eventStates.fail
+                }
+            },
+            'success':{
+                'viewerEvent':{
+                    'message': "Saved!",
+                    'state': eventStates.pass
+                }
+            }
+        },
+    }
+
     function formatDate(date){
         var dd = String(date.getDate()).padStart(2, '0');
         var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -28,13 +50,23 @@ import { reload } from "firebase/auth";
         'name': "",
         'tags': [],
     }
-    let today = new Date()
-    //todo merge state variables into an object
-    $: isexpired = itemparams.expiry_date && Date.parse(itemparams.expiry_date) < today;
-    $: issafe = itemparams.expiry_date && Date.parse(itemparams.expiry_date) > today
+    
+    function getisexpired(xd){
+        var today = new Date()
+        var isexpired = Date.parse(xd+" 23:59:59") < today.valueOf() 
+        return xd && isexpired;
+    }
+    function getissafe(xd){
+        var today = new Date()
+        var isexpired = Date.parse(xd+" 23:59:59") > today.valueOf() 
+        return xd && isexpired;
+    }
+    $: isexpired = getisexpired(itemparams.expiry_date)
+    $: issafe = getissafe(itemparams.expiry_date)
     app;
     auth;
     const db = getDatabase()
+    
     get(child(ref(db), 'Items/' + itemid)).then( (snapshot)  => {
         loadedOnceOrMore = itemid;        
         console.log("yep i ran")
@@ -46,6 +78,7 @@ import { reload } from "firebase/auth";
             
             if (snapshot.val().expiry_date){
                 itemparams.expiry_date = snapshot.val().expiry_date;
+                console.log(isexpired)
                 itemparams.name = snapshot.val().name
             }
             else {
@@ -87,8 +120,19 @@ import { reload } from "firebase/auth";
             name: itemparams.name,
             tags: itemparams.tags,
             home_id: itemparams.home_id
+        }).then( ()=>{
+            var msg = {'message': "Saved!",
+                    'state': eventStates.pass}
+            console.log("sending event" + JSON.stringify(msg))
+            dispatch('viewerEvent', msg)
+        }).catch( ()=>{
+            var msg = {'message': "Save failed!",
+                    'state': eventStates.fail}
+            console.log("sending event" + JSON.stringify(msg))
+            dispatch(dispatchEvents.save.failed)
         })
     }
+    
 </script>
 
 {#if loadedOnceOrMore === itemid && !entryNotExist}

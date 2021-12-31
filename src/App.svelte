@@ -5,11 +5,17 @@
 	import Login from "./Login.svelte"
 	import Viewer from "./Viewer.svelte"
 	import LoadingSpinner from "./LoadingSpinner.svelte"
+	import {MessageBarEvent, eventStates} from "./Messagebar.svelte"
+	import MessageBarContainer from "./MessageBarContainer.svelte"
 	
 	let params = new URLSearchParams(document.location.search);
 	let itemid = params.get("id");
-	let cur_uid = ''
+	let cur_user = {
+		"uid":'',
+		'email':''
+	}
 	let fbloaded = false;
+	let event_user_notifications = [];
 
 	const firebaseConfig = {
         apiKey: "AIzaSyBUkJT0AEzVrGAms1WbDAbn_dTNehXbPNw",
@@ -35,36 +41,47 @@
             console.log(errorMessage);
         });
 	}
-	
+
 	onAuthStateChanged(auth, (user) => {
 		// This will fire on initial load then also
 		// whenever there is a change to the login state
 		fbloaded = true;
 		if (user) {
-			cur_uid = user.uid;
+			cur_user.uid = user.uid;
+			cur_user.email = user.email;
 		} else {
-			cur_uid = '';
+			cur_user.uid = '';
+			cur_user.email = '';
 		}
 	});
 
+	function handleViewerEvent(event){
+		console.log('received a message:'+ JSON.stringify(event.detail))
+		var formatted_event = new MessageBarEvent(event.detail.message, event.detail.state);
+		event_user_notifications = [...event_user_notifications, formatted_event];
+	}
 </script>
 
-<div id="toplevel">
-{#if !cur_uid && fbloaded}
+<div id="appcontent">
+<MessageBarContainer mbevents={event_user_notifications}/>
+{#if !cur_user.uid && fbloaded}
 <Login/>
 {:else if fbloaded}
-<Viewer app={fbapp} auth={auth} itemid={itemid}/>
-<div class="buttonbox white">
-	<button class="mainbutton" on:click={logout}>Log out</button>
-</div>
-
+	{#if itemid}
+		<Viewer app={fbapp} auth={auth} itemid={itemid} on:viewerEvent={handleViewerEvent}/>
+		<div class="buttonbox white">
+			<button class="mainbutton" on:click={logout}>Log out</button>
+		</div>
+	{:else}
+		Nothing here yet!
+	{/if}
 {:else}
 <LoadingSpinner/>
 {/if}
 </div>
 
 <style>
-	#toplevel {
+	#appcontent {
 		border: 1px solid black;
 		padding: 2em 0 0 0;
 	}
