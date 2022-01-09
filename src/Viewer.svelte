@@ -63,8 +63,6 @@
     function datediff(first, second) {
         // Take the difference between the dates and divide by milliseconds per day.
         // Round to nearest whole number to deal with DST.
-        console.log(first)
-        console.log(second)
         return Math.abs(Math.floor((stripTimeFromDate(second)-stripTimeFromDate(first))/(1000*60*60*24)));
     }
     let itemparams = {
@@ -94,7 +92,6 @@
     get(child(ref(db), 'Items/' + itemid)).then( (snapshot)  => {
         loadedOnceOrMore = itemid;        
         if (snapshot.exists() && snapshot.val().home_id) {
-            console.log(snapshot.val().name)
             itemparams.home_id = snapshot.val().home_id
             itemparams.expiry_date = snapshot.val().expiry_date
             
