@@ -7,6 +7,8 @@
 	import LoadingSpinner from "./LoadingSpinner.svelte"
 	import {MessageBarEvent, eventStates} from "./Messagebar.svelte"
 	import MessageBarContainer from "./MessageBarContainer.svelte"
+
+	export let appname;
 	
 	let params = new URLSearchParams(document.location.search);
 	let itemid = params.get("id");
@@ -62,6 +64,17 @@
 	}
 </script>
 
+<svelte:head>
+<title>{appname}</title>
+<html lang="en" />
+</svelte:head>
+
+<div id="nav">
+	{#if cur_user.uid}
+	<button class="linkstyle" id="logoutlink" on:click="{logout}" href="#">Log out</button>
+	{/if}
+</div>
+
 <div id="appcontent">
 <MessageBarContainer mbevents={event_user_notifications}/>
 {#if !cur_user.uid && fbloaded}
@@ -69,9 +82,6 @@
 {:else if fbloaded}
 	{#if itemid}
 		<Viewer app={fbapp} auth={auth} itemid={itemid} on:viewerEvent={handleViewerEvent}/>
-		<div class="buttonbox white">
-			<button class="mainbutton" on:click={logout}>Log out</button>
-		</div>
 	{:else}
 		Nothing here yet!
 	{/if}
@@ -82,7 +92,10 @@
 
 <style>
 	#appcontent {
-		border: 1px solid black;
 		padding: 2em 0 0 0;
+	}
+	#nav {
+		width:100%;
+		text-align: right;
 	}
 </style>

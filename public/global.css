@@ -14,17 +14,26 @@ html, body {
 	font-style:normal;
 }
 
+:root { 
+	--transparent: rgba(0,0,0,0);
+	--transparent_hover: rgba(0, 204, 255, 0.2);
+	--transparent_active: rgba(0, 204, 255, 0.5);
+	--links:rgb(0,100,200);
+	--links_visited: rgb(167, 66, 245);
+	--fonts: "Noto Sans", sans-serif;
+  }
+
 body {
 	color: #333;
 	margin: 0;
-	padding: 8px;
 	box-sizing: border-box;
-	font-size: 16px;
+	font-size: 18px;
 	font-family: "Noto Sans", sans-serif;
+	border: 1px solid black;
 }
 
 a {
-	color: rgb(0,100,200);
+	color: var(--links);
 	text-decoration: none;
 }
 
@@ -33,14 +42,14 @@ a:hover {
 }
 
 a:visited {
-	color: rgb(0,80,160);
+	color: var(--links_visited);
 }
 
 label {
 	display: block;
 }
 
-input, button, select, textarea {
+input, button, select, textarea, .field {
 	font-family: inherit;
 	font-size: inherit;
 	-webkit-padding: 0.4em 0;
@@ -71,4 +80,66 @@ button:not(:disabled):active {
 
 button:focus {
 	border-color: #666;
+}
+
+.maincontainer {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 0.5em 0 3em 0;
+}
+
+.maincontainer > * {
+	margin: 0.5em 0;
+}
+
+.buttonbox .mainbutton {
+	margin-left: auto
+}
+
+div.buttonbox {
+	display: flex;
+	flex-direction: column;
+	justify-content: right;
+	background-color: black;
+	color: white;
+	padding: 20px;
+}
+
+div.buttonbox.white {
+	background-color: white;
+	color: black;
+}
+
+input,.mainbutton, .field {
+	color: black;
+	border: 1px solid black;
+	border-radius: 6px;
+	font-size: 1em;
+	padding: 10px;
+	background-color: var(--transparent);
+}
+label {
+	font-size: 0.8em;
+	text-transform: uppercase;
+	font-style: bold;
+}
+.mainbutton.white {
+	color: white;
+	border: 1px solid white;
+}
+
+input.dashed {
+	border-radius: 0px;
+	border-width: 0;
+	border-bottom-width: 1px;
+	border-bottom-style: dashed;
+}
+
+button.linkstyle {
+	text-decoration: underline;
+	color: var(--links);
+	border: 0px;
+	background-color: transparent;
 }

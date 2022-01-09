@@ -112,12 +112,9 @@
         border-color: #3a88c4;
     }
     
-    button.iconbutton:hover,button.iconbutton:focus {
+    /* button.iconbutton:hover,button.iconbutton:focus {
         background-color: var(--transparent_hover);
-    }
-    button.iconbutton:hover,button.iconbutton:focus {
-        background-color: var(--transparent_hover);
-    }
+    } */
 
 button:active {
     background-color: var(--transparent_active);
