@@ -104,7 +104,9 @@
         display: flex;
         flex-flow: row wrap;
         max-width: calc(6* (2em + 7px));
-        margin: 5px
+        margin: 5px;
+        align-items: center;
+        justify-content: center;
     }
 
     .iconbutton.selected {
