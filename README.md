@@ -13,7 +13,7 @@ I live with 2 other people who sometimes share food, and we found ourselves thro
 
 Emojis were chosen for the food tags as they are generally well-designed and clear in their meaning, and using them rather than custom icons reduced the overhead of the site and simplified the design.
 
-In the end, we discovered that water-soluble labels (like these: https://www.messbrands.com/product/dissolvable-food-labels-white-blank/) were a better fit because they were faster and more frictionless. However, I'm still thrilled at 
+In the end, we discovered that water-soluble labels (like these: https://www.messbrands.com/product/dissolvable-food-labels-white-blank/) were a better fit because they were faster and more frictionless. However, I'm still thrilled with the design and had a blast making it!
 
 ## How far along is it?
 I'd describe it as a "functional prototype". Users can scan labels to open the webapp to the appropriate record, and both saving new entries and viewing entries works perfectly.
